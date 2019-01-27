@@ -8,11 +8,12 @@ import java.util.*;
 
 public class FileExplorerActivity extends Activity implements AdapterView.OnItemClickListener
 {
-	String rootPath=Environment.getExternalStorageDirectory().getPath();
-	String path=rootPath;
+	
 	ListView lv;
 	SimpleAdapter sa;
 	List<Map<String,Object>>list=new ArrayList<>();
+	String rootPath=Environment.getExternalStorageDirectory().getPath();
+	String path=rootPath;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -39,7 +40,7 @@ public class FileExplorerActivity extends Activity implements AdapterView.OnItem
 		updatelist(path);
 	}
 
-	private void updatelist(String path)
+	protected void updatelist(String path)
 	{
 		setTitle(path);
 		list.clear();
@@ -50,7 +51,21 @@ public class FileExplorerActivity extends Activity implements AdapterView.OnItem
 			{
 				Map<String,Object>map=new HashMap<>();
 				if(files.isDirectory()){map.put("pic",R.drawable.wenjianjia);}
-				else{map.put("pic",R.drawable.apk);}
+				else{
+					String filePath=files.getPath();
+					String[]filePathArray=filePath.split("\\.");
+					int arrayLen=filePathArray.length;
+					if("apk".equalsIgnoreCase(filePathArray[arrayLen-1]))
+					{
+map.put("pic",R.drawable.apk);
+					}
+					else{
+						//new AlertDialog.Builder(getApplication()).setMessage("未知类型").show();
+					
+					map.put("pic",R.drawable.unknown);
+					}
+					
+					}
 				map.put("name",files.getName());
 				map.put("path",files.getPath());
 				list.add(map);
@@ -62,7 +77,39 @@ public class FileExplorerActivity extends Activity implements AdapterView.OnItem
 	@Override
 	public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4)
 	{
+		String path=(String)list.get(p3).get("path");
+		File filess=new File(path);
+		if(filess.isDirectory())
+		{updatelist(path);}
+		else{
+			String filePath=filess.getPath();
+			String[]filePathArray=filePath.split("\\.");
+			int arrayLen=filePathArray.length;
+			if("apk".equalsIgnoreCase(filePathArray[arrayLen-1]))
+			{
+				
+			}
+			else{
+				new AlertDialog.Builder(this).setMessage("未知类型").show();
+			}
+		}
 		// TODO: Implement this method
+	}
+
+	@Override
+	public void onBackPressed()
+	{
+		// TODO: Implement this method
+		
+		if(path.equals(rootPath))
+		{
+			super.onBackPressed();
+		}
+		else{
+			File filesss=new File(path);
+			path=filesss.getParentFile().getPath();
+			updatelist(path);
+		}
 	}
 
 	
