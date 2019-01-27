@@ -7,13 +7,18 @@ import android.view.*;
 import android.widget.*;
 import android.provider.*;
 
-public class MainActivity extends Activity implements AdapterView.OnItemClickListener,DialogInterface.OnClickListener
+public class MainActivity extends Activity implements AdapterView.OnItemClickListener,DialogInterface.OnClickListener,View.OnClickListener
 {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+		Button b1,b2;
+		b1=(Button)findViewById(R.id.mainButton1);
+		b2=(Button)findViewById(R.id.mainButton2);
+		b1.setOnClickListener(this);
+		b2.setOnClickListener(this);
     }
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
@@ -69,4 +74,18 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	{
 		// TODO: Implement this method
 	}
+
+	@Override
+	public void onClick(View p1)
+	{
+		switch(p1.getId())
+		{
+			case R.id.mainButton1:
+				Intent i=new Intent(MainActivity.this,FileExplorerActivity.class);
+				startActivityForResult(i,7);
+		}
+		// TODO: Implement this method
+	}
+
+	
 }
